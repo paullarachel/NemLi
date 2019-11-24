@@ -4,9 +4,12 @@ from . import views
 
 app_name = 'gerenciador'
 urlpatterns = [
-    path('login', views.paginaLogin, name='paginaLogin'),
+    path('', views.paginaLogin, name='paginaLogin'),
     path('inicio', views.paginaInicial, name='paginaInicial'),
     path('cadastro', views.paginaCadastro, name='paginaCadastro'),
     path('cadastrar', views.cadastrar, name='cadastrar'),
-    path('logar', views.logar, name='logar')
+    path('logar', views.logar, name='logar'),
+    path('deslogar', views.deslogar, name='deslogar'),
+    path('novo_livro', views.adicionarLivro, name='adicionarLivro'),
+    path('excluir_livro/<int:livro_id>', views.excluirLivro, name='excluirLivro')
 ]

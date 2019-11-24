@@ -22,6 +22,11 @@ def logar(request):
         )
         return HttpResponseRedirect(reverse('gerenciador:paginaLogin'))
 
+def deslogar(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('gerenciador:paginaLogin'))
+
+
 def paginaLogin(request):
     return render(request, 'gerenciador/registration/login.html')
 
@@ -50,13 +55,12 @@ def adicionarLivro(request):
     livro = Livro()
     autor = Autor()
     autor_livro = AutorLivro()
-    user = request.user
+    livro.user = request.user
     livro.nome = request.POST['nome']
     livro.isbn_13 = request.POST['isbn_13']
-    livro.ano = request.POST['ano']
     livro.capa = request.POST['capa']
     livro.sinopse = request.POST['sinopse']
-    autor = request.POST['autor']
+    autor.nome = request.POST['autor']
     livro.save()
     autor.save()
     autor_livro.livro = livro
@@ -67,4 +71,10 @@ def adicionarLivro(request):
         'Livro cadastrado com sucesso!'
     )
     return HttpResponseRedirect(reverse('gerenciador:paginaInicial'))
+
+def excluirLivro(request, livro_id):
+    livro = Livro.objects.get(pk=livro_id)
+    livro.delete()
+    return HttpResponseRedirect(reverse('gerenciador:paginaInicial'))
+    
 

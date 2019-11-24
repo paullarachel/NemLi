@@ -22,7 +22,7 @@
                   <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">Sair</a>
+                  <a class="nav-link" href="{% url 'gerenciador:deslogar' %}">Sair</a>
                 </li>
               </ul>
               <form class="form-inline my-2 my-lg-0">
@@ -42,16 +42,40 @@
                 <hr>
                 <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#Modal">
                     + Adicionar
-                </button>   
-              <div class="w-25 p-3">
-                <figure class="figure">
-                <img src="https://bibliotecaucs.files.wordpress.com/2015/04/c0f3d-bb_cb_4.jpg" class="figure-img img-fluid rounded" alt="A generic square placeholder image with rounded corners in a figure.">
-                <figcaption class="figure-caption"></figcaption>
-                </figure>
-              </div>
-            </div>           
+                </button> 
+                <br>
+                <br>  
+                {% if messages %}
+                  {% for msg in messages %}      
+                        <div class="alert alert-dismissible alert-success">
+                           <button type="button" class="close" data-dismiss="alert">&times;</button>
+                          <strong>{{msg.message}}</strong> 
+                       </div>         
+                 {% endfor %}
+                {% endif %}
+              
+            </div>
           </div>
-        </div>
+          
+              
+                <div class="row">                                     
+                              {% if livros %}
+                              {% for livro in livros %}
+                              <div class="col-sm-3">
+                                  <div class="">
+                                     <img src="{{livro.capa}}" alt="{{livro.nome}}" class="rounded img-thumbnail">
+                                     <br>
+                                     <a href="{% url 'gerenciador:excluirLivro' livro.id %}"><button type="button" class="btn btn-danger btn-sm">Excluir</button></a>
+                                </div>
+                              </div>
+                              {% endfor %}
+                              {% else %}
+                              <p>Não há livros cadastrados.</p>
+                              {% endif %}                                            
+                 </div>
+            </div>           
+          
+        
 
 
         <div class="modal" id="Modal">
@@ -64,7 +88,7 @@
                   </button>
                 </div>
                 <div class="modal-body">
-                    <form action=" " method="POST"> {%csrf_token%}
+                    <form action="{% url 'gerenciador:adicionarLivro' %}" method="POST"> {%csrf_token%}
                         <div class="form-group">
                             <label class="col-form-label" for="inputDefault">Nome:</label>
                             <input type="text" name="nome" class="form-control" placeholder="" id="nome" required>
@@ -83,7 +107,7 @@
                         </div>
                         <div class="form-group">
                             <label class="col-form-label" for="inputDefault">Capa:</label>
-                            <input type="text" name="ano" class="form-control" placeholder="" id="capa" required>
+                            <input type="text" name="capa" class="form-control" placeholder="" id="capa" required>
                         </div>    
                         <div class="form-group">
                             <label for="exampleTextarea">Sinopse:</label>
@@ -156,12 +180,9 @@
                 
                 document.getElementById('isbn_13').value=(livroInfo.volumeInfo.industryIdentifiers[identificador].identifier);
                 
-            }
-
-           
+            }           
             document.getElementById('sinopse').value=(livroInfo.volumeInfo.description);
-            
-            
+            document.getElementById('autor').value=(livroInfo.volumeInfo.authors)           
         }
     }
                       

@@ -22,5 +22,5 @@ class Autor(models.Model):
     nome = models.CharField(max_length=200)
 
 class AutorLivro(models.Model):
-    autor = models.ForeignKey(Autor, on_delete=models.PROTECT)
-    livro = models.ForeignKey(Livro, on_delete=models.PROTECT)
+    autor = models.ForeignKey(Autor, on_delete=models.CASCADE)
+    livro = models.ForeignKey(Livro, on_delete=models.CASCADE)
