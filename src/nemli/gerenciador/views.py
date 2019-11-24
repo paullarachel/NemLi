@@ -48,11 +48,23 @@ def paginaInicial(request):
 
 def adicionarLivro(request):
     livro = Livro()
+    autor = Autor()
+    autor_livro = AutorLivro()
     user = request.user
     livro.nome = request.POST['nome']
     livro.isbn_13 = request.POST['isbn_13']
     livro.ano = request.POST['ano']
+    livro.capa = request.POST['capa']
     livro.sinopse = request.POST['sinopse']
+    autor = request.POST['autor']
     livro.save()
-    return HttpResponse('a')
+    autor.save()
+    autor_livro.livro = livro
+    autor_livro.autor = autor
+    autor_livro.save()
+    messages.add_message(
+        request, messages.SUCCESS,
+        'Livro cadastrado com sucesso!'
+    )
+    return HttpResponseRedirect(reverse('gerenciador:paginaInicial'))
 

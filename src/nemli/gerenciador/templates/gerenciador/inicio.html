@@ -32,23 +32,112 @@
             </div>
           </nav>
 
-
-          <div class="w-25 p-3">
-            <figure class="figure">
-            <img src="https://bibliotecaucs.files.wordpress.com/2015/04/c0f3d-bb_cb_4.jpg" class="figure-img img-fluid rounded" alt="A generic square placeholder image with rounded corners in a figure.">
-            <figcaption class="figure-caption"></figcaption>
-          </figure>
+        
+          <br>
+          
+        <div class="container">
+          <div class="row">
+            <div class="col-sm">
+                <h2>Bem vindo(a), {{user.username}}. Aqui estão todos os seus livros...</h2>
+                <hr>
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#Modal">
+                    + Adicionar
+                </button>   
+              <div class="w-25 p-3">
+                <figure class="figure">
+                <img src="https://bibliotecaucs.files.wordpress.com/2015/04/c0f3d-bb_cb_4.jpg" class="figure-img img-fluid rounded" alt="A generic square placeholder image with rounded corners in a figure.">
+                <figcaption class="figure-caption"></figcaption>
+                </figure>
+              </div>
+            </div>           
+          </div>
         </div>
 
-          
 
-    
+        <div class="modal" id="Modal">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Novo livro</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                    <form action=" " method="POST"> {%csrf_token%}
+                        <div class="form-group">
+                            <label class="col-form-label" for="inputDefault">Nome:</label>
+                            <input type="text" name="nome" class="form-control" placeholder="" id="nome" required>
+                        </div>
+                        <div class="form-label-group">
+                            <label for="inputDefault">Isbn (13):</label>
+                            <input type="email" onchange="GetDataISBN(this.value);" name="isbn_13" id="isbn_13" class="form-control" placeholder="" required autofocus>     
+                       </div>
+                        <div class="form-group">
+                            <label class="col-form-label" for="inputDefault">Autor:</label>
+                            <input type="text" name="autor" class="form-control" placeholder="" id="autor" required>
+                        </div>        
+                        <div class="form-group">
+                            <label class="col-form-label" for="inputDefault">Ano:</label>
+                            <input type="text" name="ano" class="form-control" placeholder="" id="ano" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label" for="inputDefault">Capa:</label>
+                            <input type="text" name="ano" class="form-control" placeholder="" id="capa" required>
+                        </div>    
+                        <div class="form-group">
+                            <label for="exampleTextarea">Sinopse:</label>
+                            <textarea class="form-control" name="sinopse" id="sinopse" rows="3"></textarea>
+                        </div>                 
+                </div>
+                <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Enviar</button>                            
+                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                </div>
+              </form>
+              </div>
+            </div>
+          </div>
+          
             
             <footer class="container-fluid text-center footer">
                 <span class="text-muted">@ 2019 <a href="https://github.com/paullarachel">Rachel.</a></span>
                 <span class="text-muted">Feito com <a href="https://getbootstrap.com/">Bootstrap</a> e framework<a href="https://www.djangoproject.com/"> Django.</a></span>
                 <span class="text-muted"><a href="https://bootswatch.com/">Tema.</a></span>  
               </footer>
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script>
+            function GetDataISBN(isbn){
+            var element;
+            var script = document.createElement('script');
+            script.src = 'https://www.googleapis.com/books/v1/volumes?callback=GetInfo&q=isbn:' + isbn;
+            document.body.appendChild(script);
+            }
+
+            function GetInfo(booksInfo){
+            if (booksInfo.totalItems > 0){
+            var livroInfo = booksInfo.items[0];
+            document.getElementById('editora').value=(livroInfo.volumeInfo.publisher);
+            document.getElementById('nome').value=(livroInfo.volumeInfo.title);
+            var thumb = livroInfo.volumeInfo.imageLinks.thumbnail;
+            thumb = thumb.replace("zoom=1", "zoom=0");
+            document.getElementById('capa').value=(thumb);
+            for (identificador in livroInfo.volumeInfo.industryIdentifiers){
+                console.log(livroInfo.volumeInfo.industryIdentifiers[identificador]);
+                document.getElementById('isbn_13').value=(livroInfo.volumeInfo.industryIdentifiers[identificador].identifier);             
+            }
+
+            document.getElementById('autor').value=(livroInfo.volumeInfo.authors);
+            document.getElementById('sinopse').value=(livroInfo.volumeInfo.description);            
+            }
+         }
+        </script>
+    </body>
+</html>
+
             
     </body>
 </html>
