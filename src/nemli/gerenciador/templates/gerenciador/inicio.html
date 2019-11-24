@@ -69,17 +69,17 @@
                             <label class="col-form-label" for="inputDefault">Nome:</label>
                             <input type="text" name="nome" class="form-control" placeholder="" id="nome" required>
                         </div>
-                        <div class="form-label-group">
+                        <div class="form-group">
                             <label for="inputDefault">Isbn (13):</label>
-                            <input type="email" onchange="GetDataISBN(this.value);" name="isbn_13" id="isbn_13" class="form-control" placeholder="" required autofocus>     
+                            <input type="text" onchange="GetDataISBN(this.value);" name="isbn_13" id="isbn_13" class="form-control" placeholder="" required autofocus>     
                        </div>
                         <div class="form-group">
                             <label class="col-form-label" for="inputDefault">Autor:</label>
                             <input type="text" name="autor" class="form-control" placeholder="" id="autor" required>
                         </div>        
                         <div class="form-group">
-                            <label class="col-form-label" for="inputDefault">Ano:</label>
-                            <input type="text" name="ano" class="form-control" placeholder="" id="ano" required>
+                            <label class="col-form-label" for="inputDefault">Editora:</label>
+                            <input type="text" name="ano" class="form-control" placeholder="" id="editora" required>
                         </div>
                         <div class="form-group">
                             <label class="col-form-label" for="inputDefault">Capa:</label>
@@ -110,15 +110,41 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <script>
-            function GetDataISBN(isbn){
-            var element;
-            var script = document.createElement('script');
-            script.src = 'https://www.googleapis.com/books/v1/volumes?callback=GetInfo&q=isbn:' + isbn;
-            document.body.appendChild(script);
-            }
+            /*function getBookDetails(isbn) {
+  
+               // Query the book database by ISBN code.
+  
+              var url = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn;
+  
+              var response = UrlFetchApp.fetch(url);
+              var results = JSON.parse(response);
+  
+              if (results.totalItems) {
+    
+              // There'll be only 1 book per ISBN
+              var book = results.items[0];
+    
+              document.getElementById('nome') = (book["volumeInfo"]["title"]);
+              document.getElementById('autor') = (book["volumeInfo"]["authors"]);
+              document.getElementById('editora') = (book["volumeInfo"]["publisher"]);
+              var thumb = (book["volumeInfo"]["imageLinks"]["thumbnail"]);
+              thumb = thumb.replace("zoom=1", "zoom=0");
+              document.getElementById('capa').value=(thumb);
+   
+              // For debugging
+             Logger.log(book);
+            } 
+          }*/
 
-            function GetInfo(booksInfo){
-            if (booksInfo.totalItems > 0){
+          function GetDataISBN(isbn){
+        var element;
+        var script = document.createElement('script');
+        script.src = 'https://www.googleapis.com/books/v1/volumes?callback=GetInfo&q=isbn:' + isbn;
+        document.body.appendChild(script);
+    }
+
+          function GetInfo(booksInfo){
+        if (booksInfo.totalItems > 0){
             var livroInfo = booksInfo.items[0];
             document.getElementById('editora').value=(livroInfo.volumeInfo.publisher);
             document.getElementById('nome').value=(livroInfo.volumeInfo.title);
@@ -127,13 +153,18 @@
             document.getElementById('capa').value=(thumb);
             for (identificador in livroInfo.volumeInfo.industryIdentifiers){
                 console.log(livroInfo.volumeInfo.industryIdentifiers[identificador]);
-                document.getElementById('isbn_13').value=(livroInfo.volumeInfo.industryIdentifiers[identificador].identifier);             
+                
+                document.getElementById('isbn_13').value=(livroInfo.volumeInfo.industryIdentifiers[identificador].identifier);
+                
             }
 
-            document.getElementById('autor').value=(livroInfo.volumeInfo.authors);
-            document.getElementById('sinopse').value=(livroInfo.volumeInfo.description);            
-            }
-         }
+           
+            document.getElementById('sinopse').value=(livroInfo.volumeInfo.description);
+            
+            
+        }
+    }
+                      
         </script>
     </body>
 </html>
