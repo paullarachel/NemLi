@@ -1,0 +1,46 @@
+{% extends 'gerenciador/registration/login.html' %}
+{% block mensagem %}
+<div class="alert alert-dismissible alert-success">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Well done!</strong> You successfully read <a href="#" class="alert-link">this important alert message</a>.
+  </div>
+  {% endblock %}
+
+
+       {% block form %}
+        <div class="container">
+                <div class="row">
+                  <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+                    <div class="card card-signin my-5">
+                      <div class="card-body">
+                        <h3 class="card-title text-center">Fazer cadastro</h3>
+                        <form action="{% url 'gerenciador:cadastrar' %}" method="POST" class="form-signin">{% csrf_token %}
+                          <div class="form-label-group">
+                            <label>Usuário</label>
+                            <input type="text" name="usuario" id="inputEmail" class="form-control" placeholder="Digite um nome de usuario" required autofocus>
+                          </div>
+
+                          <div class="form-label-group">
+                                <label for="inputEmail">Email</label>
+                                <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Digite seu email" required autofocus>     
+                          </div>
+            
+                          <div class="form-label-group">
+                            <label for="inputPassword">Senha</label>
+                            <input type="password" name="senha" id="inputPassword" class="form-control" placeholder="Digite uma senha" required>
+                          </div>
+                          <br/>
+                          <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Cadastrar</button>
+                          <hr class="my-4">
+                          <button class="btn btn-lg btn-google btn-block text-uppercase" type="submit"><i class="fab fa-google mr-2"></i><a href="{% url 'gerenciador:paginaLogin' %}">Já está cadastrado?</a></button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endblock %}
+
+              
+           
+    
