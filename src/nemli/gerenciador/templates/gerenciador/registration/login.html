@@ -1,62 +1,72 @@
 <!DOCTYPE html>
 {% load static %}
 <html>
-    <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-            <!-- Bootstrap CSS -->
-            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-            <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
-        <title>NemLi</title>
-    </head>
-    <body>
-     <div class="">
-    {% if messages %}
-        {% for msg in messages %}
-        {% block mensagem %}
-        <div class="alert alert-dismissible alert-danger">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <strong>{{msg.message}}</strong> 
-          </div>
-          {% endblock %}
-        {% endfor %}
-    {% endif %}
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+  <title>NemLi</title>
+</head>
+
+<body>
+  <div class="">
+
 
     {% block form %}
-     <div class="container">
-            <div class="row">
-              <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
-                <div class="card card-signin my-5">
-                  <div class="card-body">
-                    <h3 class="card-title text-center">Fazer login</h3>
-                    <form action="{% url 'gerenciador:logar' %}" method="POST" class="form-signin">{% csrf_token %}
-                      <div class="form-label-group">
-                        <label>Usuário</label>
-                        <input type="text" name="usuario" id="inputEmail" class="form-control" placeholder="Digite aqui seu usuario" required autofocus>
-                      </div>
-        
-                      <div class="form-label-group">
-                        <label for="inputPassword">Senha</label>
-                        <input type="password" name="senha" id="inputPassword" class="form-control" placeholder="Digite aqui sua senha" required>
-                      </div>
-                      <br/>
-                      <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Logar</button>
-                      <hr class="my-4">
-                      <button class="btn btn-lg btn-google btn-block text-uppercase" type="submit"><i class="fab fa-google mr-2"></i><a href="{% url 'gerenciador:paginaCadastro' %}">Cadastre-se</a></button>
-                    </form>
-                  </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+          <div class="card card-signin my-5">
+            <div class="card-body">
+              <h3 class="card-title text-center">Fazer login</h3>
+              <form action="{% url 'gerenciador:logar' %}" method="POST" class="form-signin">{% csrf_token %}
+                {% if messages %}
+                {% for msg in messages %}
+                {% block mensagem %}
+                <div class="alert alert-dismissible alert-danger">
+                  <button type="button" class="close" data-dismiss="alert">&times;</button>
+                  {{msg.message}}
                 </div>
-              </div>
+                {% endblock %}
+                {% endfor %}
+                {% endif %}
+                <div class="form-label-group">
+                  <label>Usuário</label>
+                  <input type="text" name="usuario" id="inputEmail" class="form-control"
+                    placeholder="Digite aqui seu usuario" required autofocus>
+                </div>
+
+                <div class="form-label-group">
+                  <label for="inputPassword">Senha</label>
+                  <input type="password" name="senha" id="inputPassword" class="form-control"
+                    placeholder="Digite aqui sua senha" required>
+                </div>
+                <br />
+                <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Logar</button>
+                <hr class="my-4">
+                <button class="btn btn-lg btn-google btn-block text-uppercase" type="submit"><i
+                    class="fab fa-google mr-2"></i><a
+                    href="{% url 'gerenciador:paginaCadastro' %}">Cadastre-se</a></button>
+              </form>
             </div>
           </div>
-          {% endblock %}
-  
-            
-            <footer class="container-fluid text-center footer">
-                <span class="text-muted">@ 2019 <a href="https://github.com/paullarachel">Rachel.</a></span>
-                <span class="text-muted">Feito com <a href="https://getbootstrap.com/">Bootstrap</a> e framework<a href="https://www.djangoproject.com/"> Django.</a></span>
-                <span class="text-muted"><a href="https://bootswatch.com/">Tema.</a></span>  
-              </footer>
-            
-    </body>
+        </div>
+      </div>
+    </div>
+    {% endblock %}
+
+
+    <footer class="container-fluid text-center footer">
+      <span class="text-muted">@ 2019 <a href="https://github.com/paullarachel">Rachel.</a></span>
+      <span class="text-muted">Feito com <a href="https://getbootstrap.com/">Bootstrap</a> e framework<a
+          href="https://www.djangoproject.com/"> Django.</a></span>
+      <span class="text-muted"><a href="https://bootswatch.com/">Tema.</a></span>
+    </footer>
+
+</body>
+
 </html>
