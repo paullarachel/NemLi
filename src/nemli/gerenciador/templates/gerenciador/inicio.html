@@ -50,9 +50,13 @@
         <div class="container">
           <div class="row">
             <div class="col-sm">
-                <h2>Bem vindo(a), {{user.username}}. Aqui estão todos os seus livros...</h2>
+                <div class="jumbotron">
+                    <h1 class="">Bem vindo(a), {{user.username}}. Aqui estão todos os seus livros...</h1>
+                    <p class="lead">Adicione aqui os livros que você quer lembrar. Gerencie o que você está lendo, já leu, deseja ler e parou de ler.</p>          
+                  </div>
+                <h2>Lendo agora</h2>
                 <hr>
-                <br>  
+                  
                 {% if messages %}
                   {% for msg in messages %}      
                         <div class="alert alert-dismissible alert-success">
@@ -69,11 +73,10 @@
                 <div class="row">                                     
                               {% if livros %}
                               {% for livro in livros %}
-                              <div class="col-sm-3">
+                              <div class="col-sm">
                                   <div class="">
-                                     <img src="{{livro.capa}}" alt="{{livro.nome}}" class="rounded img-thumbnail">
+                                      <a href="{% url 'gerenciador:excluirLivro' livro.id %}"><img style="width:200px;height:300px;" src="{{livro.capa}}" alt="{{livro.nome}}" class=" rounded img-thumbnail"></a>
                                      <br>
-                                     <a href="{% url 'gerenciador:excluirLivro' livro.id %}"><button type="button" class="btn btn-danger btn-sm">Excluir</button></a>
                                 </div>
                               </div>
                               {% endfor %}
@@ -148,7 +151,7 @@
                         <div class="form-group">
                             <fieldset>
                               <label class="control-label" for="readOnlyInput">Sinopse:</label>
-                              <input class="form-control" name="sinopse" id="sinopse" type="text" placeholder="" readonly="">
+                              <textarea class="form-control" name="sinopse" id="sinopse" type="text" placeholder="" readonly=""></textarea>
                             </fieldset>
                           </div>  
                                          
