@@ -21,13 +21,25 @@
                 <li class="nav-item active">
                   <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                 </li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Livros</a>
+                  <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 40px, 0px);">
+                    <a class="dropdown-item" href="#">Todos</a>
+                    <a class="dropdown-item" href="#">Lendo</a>
+                    <a class="dropdown-item" href="#">Lista de desejos</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Parados</a>
+                  </div>
+                </li>
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'gerenciador:deslogar' %}">Sair</a>
                 </li>
+                
               </ul>
               <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="text" placeholder="Search">
-                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#Modal">
+                    + Adicionar
+                </button> 
               </form>
             </div>
           </nav>
@@ -40,10 +52,6 @@
             <div class="col-sm">
                 <h2>Bem vindo(a), {{user.username}}. Aqui estão todos os seus livros...</h2>
                 <hr>
-                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#Modal">
-                    + Adicionar
-                </button> 
-                <br>
                 <br>  
                 {% if messages %}
                   {% for msg in messages %}      
@@ -90,29 +98,60 @@
                 <div class="modal-body">
                     <form action="{% url 'gerenciador:adicionarLivro' %}" method="POST"> {%csrf_token%}
                         <div class="form-group">
+                            <label for="inputDefault">Isbn:</label>
+                            <input type="text" onchange="GetDataISBN(this.value);" name="isbn_13" id="isbn_13" class="form-control" placeholder="" required autofocus>     
+                        </div>
+                        <!--div class="form-group">
                             <label class="col-form-label" for="inputDefault">Nome:</label>
                             <input type="text" name="nome" class="form-control" placeholder="" id="nome" required>
-                        </div>
+                        </div-->
                         <div class="form-group">
-                            <label for="inputDefault">Isbn (13):</label>
-                            <input type="text" onchange="GetDataISBN(this.value);" name="isbn_13" id="isbn_13" class="form-control" placeholder="" required autofocus>     
-                       </div>
-                        <div class="form-group">
+                            <fieldset>
+                              <label class="control-label" for="readOnlyInput">Nome:</label>
+                              <input class="form-control" name="nome" id="nome" type="text" placeholder="" readonly="">
+                            </fieldset>
+                          </div>                       
+                        <!--div class="form-group">
                             <label class="col-form-label" for="inputDefault">Autor:</label>
                             <input type="text" name="autor" class="form-control" placeholder="" id="autor" required>
-                        </div>        
+                        </div-->   
                         <div class="form-group">
+                            <fieldset>
+                              <label class="control-label" for="readOnlyInput">Autor:</label>
+                              <input class="form-control" name="autor" id="autor" type="text" placeholder="" readonly="">
+                            </fieldset>
+                          </div>      
+                        <!--div class="form-group">
                             <label class="col-form-label" for="inputDefault">Editora:</label>
                             <input type="text" name="ano" class="form-control" placeholder="" id="editora" required>
-                        </div>
+                        </div-->
                         <div class="form-group">
+                            <fieldset>
+                              <label class="control-label" for="readOnlyInput">Editora:</label>
+                              <input class="form-control" name="editora" id="editora" type="text" placeholder="" readonly="">
+                            </fieldset>
+                          </div> 
+                        <!--div class="form-group">
                             <label class="col-form-label" for="inputDefault">Capa:</label>
                             <input type="text" name="capa" class="form-control" placeholder="" id="capa" required>
-                        </div>    
+                        </div-->
                         <div class="form-group">
+                            <fieldset>
+                              <label class="control-label" for="readOnlyInput">Capa:</label>
+                              <input class="form-control" name="capa" id="capa" type="text" placeholder="" readonly="">
+                            </fieldset>
+                          </div>     
+                        <!--div class="form-group">
                             <label for="exampleTextarea">Sinopse:</label>
                             <textarea class="form-control" name="sinopse" id="sinopse" rows="3"></textarea>
-                        </div>                 
+                        </div-->
+                        <div class="form-group">
+                            <fieldset>
+                              <label class="control-label" for="readOnlyInput">Sinopse:</label>
+                              <input class="form-control" name="sinopse" id="sinopse" type="text" placeholder="" readonly="">
+                            </fieldset>
+                          </div>  
+                                         
                 </div>
                 <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Enviar</button>                            
