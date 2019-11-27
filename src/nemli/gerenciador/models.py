@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 # Create your models here.
 
@@ -17,6 +18,12 @@ class Livro(models.Model):
         (3, 'Quero ler')
     ]
     estado = models.IntegerField(choices=estado_choices, default=0)
+    def __str__(self):
+        return self.nome
+
+    def get_absolute_url(self):
+        return reverse('gerenciador:paginaInicial')
+ 
 
 class Autor(models.Model):
     nome = models.CharField(max_length=200)

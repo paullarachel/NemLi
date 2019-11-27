@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.views import generic
 from .models import Livro, AutorLivro, Autor
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
@@ -7,7 +7,26 @@ from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
+
+@method_decorator(login_required, name='dispatch')
+class ListarLivros(generic.ListView):
+    model = Livro
+    template_name = 'gerenciador/list_todos.html'
+
+@login_required
+def paginaInicial(request):
+    lido = Livro.objects.filter(user=request.user, estado=0).order_by("-id")[0:5]
+    lendo = Livro.objects.filter(user=request.user, estado=1).order_by("-id")[0:5]
+    parado = Livro.objects.filter(user=request.user, estado=2).order_by("-id")[0:5]
+    quero_ler = Livro.objects.filter(user=request.user, estado=3).order_by("-id")[0:5]
+    context = {'lido': lido,
+               'quero_ler': quero_ler,
+               'lendo': lendo,
+               'parado': parado
+               }
+    return render(request, 'gerenciador/inicio.html', context)
 
 # Create your views here.
 def logar(request):
@@ -45,12 +64,6 @@ def cadastrar(request):
     user.save()
     return HttpResponseRedirect(reverse('gerenciador:paginaCadastro'))
 
-@login_required
-def paginaInicial(request):
-    livros = Livro.objects.filter(user=request.user)
-    context = {'livros': livros}
-    return render(request, 'gerenciador/inicio.html', context)
-
 def adicionarLivro(request):
     livro = Livro()
     autor = Autor()
@@ -60,6 +73,7 @@ def adicionarLivro(request):
     livro.isbn_13 = request.POST['isbn_13']
     livro.capa = request.POST['capa']
     livro.sinopse = request.POST['sinopse']
+    livro.estado = request.POST['estado']
     autor.nome = request.POST['autor']
     livro.save()
     autor.save()
@@ -75,6 +89,6 @@ def adicionarLivro(request):
 def excluirLivro(request, livro_id):
     livro = Livro.objects.get(pk=livro_id)
     livro.delete()
-    return HttpResponseRedirect(reverse('gerenciador:paginaInicial'))
+    return HttpResponseRedirect(reverse('gerenciador:listarTodos'))
     
 
