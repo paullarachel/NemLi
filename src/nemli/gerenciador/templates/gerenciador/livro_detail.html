@@ -1,0 +1,26 @@
+{% extends 'gerenciador/inicio.html' %}
+{% block conteudo %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+          <div class="">
+            <img style="width:200px;height:300px;"
+                src="{{livro.capa}}" alt="{{livro.nome}}" class=" rounded img-thumbnail">
+            <br>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+          <div class="col-sm">
+            <div class="">
+              <p>{{livro.sinopse}}</p>
+              <br>
+            </div>
+          </div>
+        </div>
+
+
+</div>
+{% endblock %}

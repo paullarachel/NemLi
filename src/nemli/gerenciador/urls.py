@@ -12,5 +12,6 @@ urlpatterns = [
     path('deslogar', views.deslogar, name='deslogar'),
     path('novo_livro', views.adicionarLivro, name='adicionarLivro'),
     path('excluir_livro/<int:livro_id>', views.excluirLivro, name='excluirLivro'),
-    path('inicio/todos', views.ListarLivros.as_view(), name='listarTodos')
+    path('inicio/todos', views.ListarLivros.as_view(), name='listarTodos'),
+    path('detalhes/<int:pk>', views.VisualizarLivro.as_view(), name='visualizarLivro')
 ]

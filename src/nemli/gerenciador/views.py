@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from django.views import generic
+from django.views.generic.edit import DeleteView
 from .models import Livro, AutorLivro, Autor
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -14,6 +15,16 @@ from django.utils.decorators import method_decorator
 class ListarLivros(generic.ListView):
     model = Livro
     template_name = 'gerenciador/list_todos.html'
+
+@method_decorator(login_required, name='dispatch')
+class VisualizarLivro(generic.DetailView):
+    model = Livro
+
+def editarEstado(request, livro_id):
+    livro = Livro.objects.get(pk=livro_id)
+    livro.estado = request.POST['estado']
+    livro.save()
+    
 
 @login_required
 def paginaInicial(request):
@@ -28,7 +39,6 @@ def paginaInicial(request):
                }
     return render(request, 'gerenciador/inicio.html', context)
 
-# Create your views here.
 def logar(request):
     user = authenticate(request, username=request.POST['usuario'], password=request.POST['senha'])
     if user is not None:
@@ -92,3 +102,4 @@ def excluirLivro(request, livro_id):
     return HttpResponseRedirect(reverse('gerenciador:listarTodos'))
     
 
+    

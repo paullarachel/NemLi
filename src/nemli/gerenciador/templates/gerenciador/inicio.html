@@ -85,7 +85,7 @@
       {% for livro in lido %}
       <div class="col-sm">
         <div class="">
-          <a href="{% url 'gerenciador:excluirLivro' livro.id %}"><img style="width:200px;height:300px;"
+          <a href="{% url 'gerenciador:visualizarLivro' livro.id %}"><img style="width:200px;height:300px;"
               src="{{livro.capa}}" alt="{{livro.nome}}" class=" rounded img-thumbnail"></a>
           <br>
         </div>
