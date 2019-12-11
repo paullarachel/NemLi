@@ -4,9 +4,9 @@ from . import views
 
 app_name = 'gerenciador'
 urlpatterns = [
-    path('', views.paginaLogin, name='paginaLogin'),
+    path('', views.PaginaLogin.as_view(), name='paginaLogin'),
     path('inicio', views.paginaInicial, name='paginaInicial'),
-    path('cadastro', views.paginaCadastro, name='paginaCadastro'),
+    path('cadastro', views.PaginaCadastro.as_view(), name='paginaCadastro'),
     path('cadastrar', views.cadastrar, name='cadastrar'),
     path('logar', views.logar, name='logar'),
     path('deslogar', views.deslogar, name='deslogar'),

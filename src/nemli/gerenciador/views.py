@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views import generic
 from django.views.generic.edit import DeleteView
+from django.views.generic import TemplateView
 from .models import Livro, AutorLivro, Autor
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
@@ -20,11 +21,20 @@ class ListarLivros(generic.ListView):
 class VisualizarLivro(generic.DetailView):
     model = Livro
 
+class PaginaLogin(TemplateView):
+    template_name = 'gerenciador/registration/login.html'
+    
+class PaginaCadastro(TemplateView):
+    template_name = 'gerenciador/cadastro.html'
+
+#def ListarLivros(request, estado):
+#    if request.session.get('estado', default=False)
+
 def editarEstado(request, livro_id):
     livro = Livro.objects.get(pk=livro_id)
     livro.estado = request.POST['estado']
     livro.save()
-    
+    return HttpResponseRedirect(reverse('gerenciador:listarTodos'))
 
 @login_required
 def paginaInicial(request):
@@ -54,13 +64,6 @@ def logar(request):
 def deslogar(request):
     logout(request)
     return HttpResponseRedirect(reverse('gerenciador:paginaLogin'))
-
-
-def paginaLogin(request):
-    return render(request, 'gerenciador/registration/login.html')
-
-def paginaCadastro(request):
-    return render(request, 'gerenciador/cadastro.html')
 
 def cadastrar(request):
     username = request.POST['usuario']
