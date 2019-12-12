@@ -3,7 +3,7 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-sm">
+        <div class="col-s-6">
           <div class="">
             <img style="width:350px;height:550px;"
                 src="{{livro.capa}}" alt="{{livro.nome}}" class=" rounded img-thumbnail">
@@ -15,15 +15,60 @@
             <div class="">
               <ul class="list-group list-group-flush">
                 <li class="list-group-item"><h3>{{livro.nome}}</h3></li>
+                <li class="list-group-item"><strong>
+                {% if livro.estado == 0 %}
+                Você já leu este livro 
+                {% endif %}
+                {% if livro.estado == 1 %}
+                Você está lendo este livro
+                {% endif %} 
+                {% if livro.estado == 2 %}
+                Você parou de ler este livro
+                {% endif %} 
+                {% if livro.estado == 3 %}
+                Você quer ler este livro
+                {% endif %}
+                </strong>
+                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#edicao_estado_{{ livro.id }}">Editar</button>
+                </li>
                 <li class="list-group-item">{{livro.sinopse}}</li>
-                <li class="list-group-item">Autor: {{livro.autor}}</li>
+                <li class="list-group-item">Autor: {{autor_livro.autor.nome}}</li>
                 <li class="list-group-item">Editora: {{livro.editora}}</li>
-                <li class="list-group-item">ISBN: {{livro.isbn_13}}</li>
-                <li class="list-group-item">{{livro.estado}}</li>               
+                <li class="list-group-item">ISBN: {{livro.isbn_13}}</li>                
               </ul>
               <br>
             </div>
           </div>
         </div>
 </div>
+
+<div class="modal" id="edicao_estado_{{ livro.id }}">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Mudar estado</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="{% url 'gerenciador:editarEstado' livro.id %}" method="POST"> {%csrf_token%}
+        <div class="modal-body">
+            <div class="form-group">
+            <select name="estado" class="form-control" id="exampleSelect1" required>
+                <option value="0">Já leu este livro</option>
+                <option value="1">Está lendo este livro</option>
+                <option value="2">Começou e não terminou esse livro</option>
+                <option value="3">Quer ler este livro</option>
+            </select>
+            </div>
+            
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Salvar</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+        </div>
+      </form>
+      </div>
+    </div>
+  </div>
 {% endblock %}

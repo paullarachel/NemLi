@@ -20,9 +20,10 @@ class Livro(models.Model):
     estado = models.IntegerField(choices=estado_choices, default=0)
     def __str__(self):
         return self.nome
-
     def get_absolute_url(self):
         return reverse('gerenciador:paginaInicial')
+    def get_estado(self):
+        return self.estado
  
 
 class Autor(models.Model):

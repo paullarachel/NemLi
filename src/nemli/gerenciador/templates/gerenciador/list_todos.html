@@ -2,28 +2,39 @@
 {% block conteudo %}
 {% load static %}
 
+
+    
+ 
 <div class="container">
+
+    {% block titulo %}
+    <div classs="row">
+        {% if messages %}
+        {% for msg in messages %}
+        <div class="alert alert-dismissible alert-success">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <strong>{{msg.message}}</strong>
+        </div>
+        {% endfor %}
+        {% endif %}
+      <div class="col-sm">
+          <h2>Todos os seus livros</h2>
+          <hr>
+      </div>  
+    </div>
+    {% endblock %}
   <div class="row">
     {% if livro_list %}
     {% for livro in livro_list %}
-    <div class="col-sm">
+    <div class="col-sm-3">
       <div class="">
-        <a href=""><img style="width:200px;height:300px;" src="{{livro.capa}}" alt="{{livro.nome}}"
+        <a href="{% url 'gerenciador:visualizarLivro' livro.id %}"><img style="width:200px;height:300px;" src="{{livro.capa}}" alt="{{livro.nome}}"
             class=" rounded img-thumbnail"></a>
 
 
       </div>
-      <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-        <button type="button" class="btn btn-info btn-sm"><img style="width:25px;height:20px;" src="{% static 'imagens/icons/opcoes.png' %}"></button>
-        <div class="btn-group" role="group">
-          <button id="btnGroupDrop3" type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false"></button>
-          <div class="dropdown-menu" aria-labelledby="btnGroupDrop3">
-            <a class="dropdown-item" data-toggle="edicao_estado">Mudar estado</a>
-            <a class="dropdown-item" href="{% url 'gerenciador:excluirLivro' livro.id %}">Excluir</a>
-          </div>
-        </div>
-      </div>
+      <a href="{% url 'gerenciador:excluirLivro' livro.id %}"><button type="button" class="btn btn-danger btn-sm">Excluir</button></a>
+      <!--button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#edicao_estado_{{ livro.id }}">Editar</button-->
     </div>
     {% endfor %}
     {% else %}
@@ -31,25 +42,8 @@
     {% endif %}
   </div>
 
-  <div class="modal" id="edicao_estado">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Modal title</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <p>Modal body text goes here.</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary">Save changes</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  
 
-</div>
+
+
 {% endblock %}

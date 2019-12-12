@@ -16,10 +16,8 @@ from django.utils.decorators import method_decorator
 class ListarLivros(generic.ListView):
     model = Livro
     template_name = 'gerenciador/list_todos.html'
-
-@method_decorator(login_required, name='dispatch')
-class VisualizarLivro(generic.DetailView):
-    model = Livro
+    def get_queryset(self):
+        return Livro.objects.filter(user=self.request.user)
 
 class PaginaLogin(TemplateView):
     template_name = 'gerenciador/registration/login.html'
@@ -27,18 +25,15 @@ class PaginaLogin(TemplateView):
 class PaginaCadastro(TemplateView):
     template_name = 'gerenciador/cadastro.html'
 
-#def ListarLivros(request, estado):
-#    if request.session.get('estado', default=False)
-
 def editarEstado(request, livro_id):
     livro = Livro.objects.get(pk=livro_id)
-    livro.estado = request.POST['estado']
+    livro.estado = request.POST.get('estado', 1)
     livro.save()
     return HttpResponseRedirect(reverse('gerenciador:listarTodos'))
 
 @login_required
 def paginaInicial(request):
-    lido = Livro.objects.filter(user=request.user, estado=0).order_by("-id")[0:5]
+    lido = Livro.objects.filter(user=request.user, estado=0).order_by("-id")[0:4]
     lendo = Livro.objects.filter(user=request.user, estado=1).order_by("-id")[0:5]
     parado = Livro.objects.filter(user=request.user, estado=2).order_by("-id")[0:5]
     quero_ler = Livro.objects.filter(user=request.user, estado=3).order_by("-id")[0:5]
@@ -48,6 +43,14 @@ def paginaInicial(request):
                'parado': parado
                }
     return render(request, 'gerenciador/inicio.html', context)
+
+@login_required
+def visualizarLivro(request, livro_id):
+    autor_livro = AutorLivro.objects.get(livro=livro_id)
+    livro = Livro.objects.get(pk=livro_id)
+    context = {'livro':livro,
+               'autor_livro': autor_livro}
+    return render(request,  'gerenciador/livro_detail.html', context)
 
 def logar(request):
     user = authenticate(request, username=request.POST['usuario'], password=request.POST['senha'])
@@ -76,7 +79,7 @@ def cadastrar(request):
     )
     user.save()
     return HttpResponseRedirect(reverse('gerenciador:paginaCadastro'))
-
+@login_required
 def adicionarLivro(request):
     livro = Livro()
     autor = Autor()
@@ -86,6 +89,7 @@ def adicionarLivro(request):
     livro.isbn_13 = request.POST['isbn_13']
     livro.capa = request.POST['capa']
     livro.sinopse = request.POST['sinopse']
+    livro.editora = request.POST['editora']
     livro.estado = request.POST['estado']
     autor.nome = request.POST['autor']
     livro.save()
@@ -97,12 +101,35 @@ def adicionarLivro(request):
         request, messages.SUCCESS,
         'Livro cadastrado com sucesso!'
     )
-    return HttpResponseRedirect(reverse('gerenciador:paginaInicial'))
-
+    return HttpResponseRedirect(reverse('gerenciador:listarTodos'))
+@login_required
 def excluirLivro(request, livro_id):
     livro = Livro.objects.get(pk=livro_id)
     livro.delete()
+    messages.add_message(
+        request, messages.SUCCESS,
+        'Livro excluído com sucesso!'
+    )
     return HttpResponseRedirect(reverse('gerenciador:listarTodos'))
     
+def listarLidos(request):
+    livros = Livro.objects.filter(user=request.user,estado=0)
+    context = {'livro_list':livros}
+    return render(request, 'gerenciador/list_lidos.html', context)
+
+def listarLendo(request):
+    livros = Livro.objects.filter(user=request.user,estado=1)
+    context = {'livro_list':livros}
+    return render(request, 'gerenciador/list_lendo.html', context)
+
+def listarParados(request):
+    livros = Livro.objects.filter(user=request.user,estado=2)
+    context = {'livro_list':livros}
+    return render(request, 'gerenciador/list_parados.html', context)
+
+def listarDesejos(request):
+    livros = Livro.objects.filter(user=request.user,estado=3)
+    context = {'livro_list':livros}
+    return render(request, 'gerenciador/list_desejos.html', context)
 
     
